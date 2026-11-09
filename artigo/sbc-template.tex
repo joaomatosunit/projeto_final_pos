@@ -31,54 +31,78 @@
 \maketitle
 
 \begin{abstract}
-  This meta-paper describes the style to be used in articles and short papers
-  for SBC conferences. For papers in English, you should add just an abstract
-  while for the papers in Portuguese, we also ask for an abstract in
-  Portuguese (``resumo''). In both cases, abstracts should not have more than
-  10 lines and must be in the first page of the paper.
+This paper presents a comparative study using machine learning techniques to predict and classify the academic performance of undergraduate students in Brazil, utilizing historical data from the National Exam of Student Performance (ENADE) spanning from 2008 to 2018. To handle the massive dataset (over 3.7 million records) and high class imbalance, the continuous final score was categorized into three performance ranges (unsatisfactory, adequate, and high). A robust preprocessing pipeline was applied, consisting of One-Hot Encoding for categorical variables, scaling by StandardScaler, and majority class downsampling. Three classification algorithms were evaluated: Decision Tree, Naive Bayes, and K-Nearest Neighbors (KNN). The results demonstrated that while simple models face generalization limits due to the high dimensionality of course and institutional variables, the KNN model achieved the best overall relative performance in identifying intermediate score categories (Macro F1-Score of 0.3976). The study concludes that socioeconomic factors and the field of study are the main driving vectors of student academic achievement.
+
 \end{abstract}
      
 \begin{resumo} 
-  Este meta-artigo descreve o estilo a ser usado na confecção de artigos e
-  resumos de artigos para publicação nos anais das conferências organizadas
-  pela SBC. É solicitada a escrita de resumo e abstract apenas para os artigos
-  escritos em português. Artigos em inglês deverão apresentar apenas abstract.
-  Nos dois casos, o autor deve tomar cuidado para que o resumo (e o abstract)
-  não ultrapassem 10 linhas cada, sendo que ambos devem estar na primeira
-  página do artigo.
+Este trabalho apresenta um estudo comparativo utilizando técnicas de aprendizado de máquina para prever e classificar o desempenho acadêmico de estudantes de graduação no Brasil, utilizando dados históricos do Exame Nacional de Desempenho de Estudantes (ENADE) entre os anos de 2008 e 2018. Para lidar com o volume massivo de dados (mais de 3,7 milhões de registros) e o forte desbalanceamento de classes, a nota contínua foi categorizada em três faixas de rendimento (insatisfatório, adequado e elevado), sendo aplicado um pré-processamento robusto composto por codificação de variáveis categóricas via One-Hot Encoding, padronização (StandardScaler) e subamostragem (downsampling). Foram avaliados três algoritmos de classificação: Árvore de Decisão, Naive Bayes e K-Nearest Neighbors (KNN). Os resultados demonstraram que, embora modelos simples apresentem limitações de generalização decorrentes da alta dimensionalidade das variáveis de curso e instituição, o KNN obteve o melhor desempenho relativo na identificação de faixas intermediárias de notas (F1-Score Macro de 0,3976). O estudo aponta que fatores socioeconômicos e o tipo de curso são os principais vetores de influência no rendimento avaliado.
 \end{resumo}
 
 
-\section{General Information}
+\section{Introdução}
 
-All full papers and posters (short papers) submitted to some SBC conference,
-including any supporting documents, should be written in English or in
-Portuguese. The format paper should be A4 with single column, 3.5 cm for upper
-margin, 2.5 cm for bottom margin and 3.0 cm for lateral margins, without
-headers or footers. The main font must be Times, 12 point nominal size, with 6
-points of space before each paragraph. Page numbers must be suppressed.
+A avaliação sistemática do Ensino Superior no Brasil, especialmente por meio do Exame Nacional de Desempenho de Estudantes (ENADE), constitui um importante instrumento para a formulação de políticas públicas e o monitoramento da qualidade da formação acadêmica. Entretanto, o grande volume de dados gerados pelo exame, que entre 2008 e 2018 reuniu informações de mais de 3,7 milhões de estudantes, apresenta desafios para a identificação de padrões associados ao desempenho discente. Nesse contexto, a Mineração de Dados Educacionais (Educational Data Mining – EDM) e o Aprendizado de Máquina (Machine Learning) oferecem recursos para a análise de grandes conjuntos de dados e o desenvolvimento de modelos preditivos. Contudo, fatores como o desbalanceamento das classes e a alta dimensionalidade das variáveis representam desafios para a construção desses modelos. Diante disso, este estudo tem como objetivo desenvolver e comparar modelos de classificação baseados nos algoritmos Árvore de Decisão, Naive Bayes e K-Nearest Neighbors (KNN), visando categorizar o desempenho dos estudantes em três níveis: insatisfatório, adequado e elevado. Adicionalmente, são investigadas estratégias de engenharia e seleção de atributos, incluindo a criação da variável `\texttt{tempo\_hiato}' e a utilização da importância de atributos baseada em florestas aleatórias, com o propósito de reduzir os efeitos da dimensionalidade e aprimorar o desempenho preditivo. A avaliação dos modelos é realizada por meio da métrica F1-Score, permitindo comparar sua capacidade de classificação e identificar abordagens mais adequadas à análise do desempenho acadêmico no contexto do ENADE.
 
-Full papers must respect the page limits defined by the conference.
-Conferences that publish just abstracts ask for \textbf{one}-page texts.
+\section{Metodologia} \label{sec:Mmtodologia}
 
-\section{First Page} \label{sec:firstpage}
+Nesta seção, descreve-se a abordagem metodológica adotada para a modelagem preditiva das notas do ENADE. O fluxo de trabalho engloba desde a aquisição e pré-processamento dos dados até o balanceamento das classes, engenharia de atributos e a configuração experimental dos algoritmos de classificação.
 
-The first page must display the paper title, the name and address of the
-authors, the abstract in English and ``resumo'' in Portuguese (``resumos'' are
-required only for papers written in Portuguese). The title must be centered
-over the whole page, in 16 point boldface font and with 12 points of space
-before itself. Author names must be centered in 12 point font, bold, all of
-them disposed in the same line, separated by commas and with 12 points of
-space after the title. Addresses must be centered in 12 point font, also with
-12 points of space after the authors' names. E-mail addresses should be
-written using font Courier New, 10 point nominal size, with 6 points of space
-before and 6 points of space after.
+\subsection{Base de Dados e Filtragem Temporal}
 
-The abstract and ``resumo'' (if is the case) must be in 12 point Times font,
-indented 0.8cm on both sides. The word \textbf{Abstract} and \textbf{Resumo},
-should be written in boldface and must precede the text.
+O conjunto de dados inicial provém do repositório histórico do ENADE (2008 a 2018), totalizando 3.712.412 registros e 20 atributos originais. Visando criar um cenário experimental mais próximo da realidade contemporânea do exame, o conjunto total de dados foi segmentado de forma temporal utilizando o atributo `\texttt{NU\_ANO}'. Filtrados para os últimos 5 anos do histórico (valores de codificação de ano $\ge 6$, representando de 2014 a 2018), resultando em 1.951.891 registros.
 
-\section{CD-ROMs and Printed Proceedings}
+A eliminação de dados ausentes (missing values) nas colunas de interesse reduziu o volume total de treino para uma amostra limpa final de 1.558.332 registros antes do balanceamento.
+
+\subsection{Engenharia e Definição da Variável Alvo}
+
+A variável contínua de Nota Geral do estudante (`\texttt{NU\_GER}'), originalmente em escala de 0 a 100, foi discretizada em três classes distintas que representam o desempenho acadêmico final:
+
+1. Desempenho Insatisfatório: Notas de 0 a 49 pontos;
+
+2. Desempenho Adequado: Notas de 50 a 69 pontos;
+
+3. Desempenho Elevado: Notas de 70 a 100 pontos.
+
+Para evitar o vazamento de dados (data leakage), as variáveis de notas parciais (Componente Específico `\texttt{NU\_CE}' e Formação Geral `\texttt{NU\_FG}'), além de coordenadas geográficas redundantes (`\texttt{LONG}', `\texttt{LAT}', `\texttt{ALT}'), foram permanentemente removidas do conjunto de preditores.
+
+\subsection{Codificação de Categóricos e Padronização}
+
+Para tornar as características demográficas, socioeconômicas e institucionais legíveis pelos algoritmos de aprendizado de máquina, aplicou-se o seguinte fluxo de transformação:
+1. Seleção de Preditores: Foram priorizados 11 atributos explicativos: `\texttt{NU\_IDADE}', `\texttt{TP\_SEXO}', `\texttt{REGIAO\_CURSO}', `\texttt{CATEGAD}' (categoria administrativa), `\texttt{GRUPO}' (área do curso), `\texttt{ORGANIZACAO}' (organização acadêmica), `\texttt{QE\_I13}' (escolaridade do pai), `\texttt{QE\_I14}' (escolaridade da mãe), `UF', `\texttt{ANO\_FIM\_EM}' (ano de término do ensino médio) e `\texttt{ANO\_IN\_GRAD}' (ano de ingresso na faculdade).
+2. One-Hot Encoding: As variáveis categóricas foram mapeadas em representações binárias esparsas (dummies), resultando em uma expansão de dimensionalidade para **119 colunas explicativas**.
+3. Padronização Espacial: Como o KNN calcula distâncias para a classificação, as variáveis foram normalizadas pela remoção da média e escala para variância unitária utilizando a transformação Z-Score ($StandardScaler$):
+
+\subsection{Tratamento do Desbalanceamento (Subamostragem)}
+
+O conjunto de treinamento original apresentava um desbalanceamento de classes extremo:
+
+Desempenho Insatisfatório: 1.004.996 amostras
+
+Desempenho Adequado: 480.194 amostras
+
+Desempenho Elevado (Minoritária): 73.142 amostras
+
+\subsection{Engenharia e Seleção de Atributos (Otimização do KNN)}
+Devido ao custo computacional $O(N \cdot D)$ do algoritmo KNN, onde $D$ é o número de colunas, aplicou-se uma segunda etapa metodológica de otimização:
+
+Engenharia de Features: Criou-se a variável sintética `\texttt{tempo\_hiato}' (`\texttt{ANO\_IN\_GRAD}' - `\texttt{ANO\_FIM\_EM}') para capturar o hiato temporal que o estudante levou para ingressar no ensino superior após concluir o ensino médio.
+
+Seleção de Atributos: Utilizou-se o estimador floresta aleatória (Random Forest Classifier) com 50 estimadores para ranquear o ganho de informação e a impureza de Gini de cada atributo. Apenas as 20 características mais importantes foram mantidas no conjunto de dados, reduzindo sensivelmente o ruído geométrico multidimensional para o KNN.
+
+\subsection{Algoritmos de Aprendizado de Máquina Avaliados}
+
+Três classificadores com características matemáticas distintas foram aplicados e comparados sobre o conjunto de teste de hold-out (20\% do dataset original):
+
+1. Árvore de Decisão Simples (`DecisionTreeClassifier'): Modelo não paramétrico parametrizado com critério de impureza de Gini e profundidade máxima limitada em 3 níveis (`\texttt{max\_depth}=3') para fins de interpretabilidade geométrica inicial.
+
+2. Naive Bayes Gaussiano (`GaussianNB'): Algoritmo probabilístico baseado no Teorema de Bayes com suposição de independência condicional forte entre as variáveis explicativas.
+
+3. Vizinhos Mais Próximos (`KNeighborsClassifier'): Modelo baseado em instâncias instanciado com $k=3$ (modelo inicial) e $k=5$ (modelo otimizado), computando distâncias euclidianas no espaço padronizado com execução paralela de threads (`\texttt{n\_jobs}=-1').
+
+As métricas de desempenho avaliadas para cada cenário foram a Acurácia, a Precisão, o Recall e, fundamentalmente, o F1-Score Macro para lidar de forma justa com as três faixas de rendimento.
+
+\section{Resultados}
 
 In some conferences, the papers are published on CD-ROM while only the
 abstract is published in the printed Proceedings. In this case, authors are
@@ -86,7 +110,7 @@ invited to prepare two final versions of the paper. One, complete, to be
 published on the CD and the other, containing only the first page, with
 abstract and ``resumo'' (for papers in Portuguese).
 
-\section{Sections and Paragraphs}
+\section{Considerações Finais}
 
 Section titles must be in boldface, 13pt, flush left. There should be an extra
 12 pt of space before each title. Section numbering is optional. The first
