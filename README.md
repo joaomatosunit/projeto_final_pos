@@ -71,7 +71,7 @@ K-Nearest Neighbors (KNN): algoritmo que realiza classificações considerando a
 Naive Bayes (GaussianNB): classificador probabilístico baseado no teorema de Bayes.
 
 ### 6. Avaliação dos modelos
-A avaliação considera principalmente:
+A métrica utilizada para a comparação dos modelos foi a F1-Score que a média harmônica entre precisão e o recall.
 
 
 
