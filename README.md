@@ -15,7 +15,7 @@ Enade
 Este repositório reúne os materiais, códigos-fonte, dados, experimentos e documentação desenvolvidos durante a elaboração do projeto final da pós-graduação.
 
 🎯 **Objetivos**\
-Desenvolver um modelo preditivo utilizando dados históricos do ENADE (Exame Nacional de Desempenho dos Estudantes), explorando características dos estudantes e dos cursos para classificar o desempenho acadêmico em três categorias:\
+Desenvolver um modelo preditivo utilizando dados históricos do ENADE (Exame Nacional de Desempenho dos Estudantes), explorando características dos estudantes e dos cursos para classificar o desempenho acadêmico em três categorias:
 
 Desempenho insatisfatório;\
 Desempenho adequado;\
